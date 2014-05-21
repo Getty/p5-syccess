@@ -1,0 +1,86 @@
+package Syccess::Field;
+# ABSTRACT: Syccess field
+
+use Moo;
+use Module::Runtime qw( use_module );
+use Module::Load::Conditional qw( can_load );
+
+has syccess => (
+  is => 'ro',
+  required => 1,
+  weak_ref => 1,
+);
+
+has name => (
+  is => 'ro',
+  required => 1,
+);
+
+has validators_list => (
+  is => 'ro',
+  required => 1,
+  init_arg => 'validators',
+);
+
+has validators => (
+  is => 'lazy',
+  init_arg => undef,
+);
+
+sub _build_validators {
+  my ( $self ) = @_;
+  my @validators;
+  my @validators_list = ref $self->validators_list eq 'HASH'
+    ? ( map { $_, $self->validators_list->{$_} }
+        sort { $a cmp $b }
+        keys %{$self->validators_list} )
+    : ( @{$self->validators_list} );
+  while (@validators_list) {
+    my ( $key, $arg ) = splice(@validators_list,0,2);
+    my %args;
+    if (ref $arg eq 'HASH') {
+      %args = %{$arg};
+    } else {
+      $args{arg} = $arg;
+    }
+    $args{syccess_field} = $self;
+    push @validators, $self->load_class_by_key($key)->new(%args);
+  }
+  return [ @validators ];
+}
+
+sub load_class_by_key {
+  my ( $self, $key ) = @_;
+  my $class;
+  if ($key =~ m/::/) {
+    if (can_load( modules => { $key, 0 } )) {
+      $class = $key;
+    }
+  } else {
+    my $module = $key;
+    $module =~ s/_([a-z])/\U$1/;
+    $module = ucfirst($module);
+    my @namespaces = @{$self->syccess->validator_namespaces};
+    for my $namespace (@namespaces) {
+      my $can_class = $namespace.'::'.$module;
+      if (can_load( modules => { $can_class, 0 } )) {
+        $class = $can_class;
+        last;
+      }
+    }
+  }
+  die __PACKAGE__." can't load validator for ".$key unless $class;
+  return use_module($class);
+}
+
+sub validate {
+  my ( $self, %params ) = @_;
+  my @validators = @{$self->validators};
+  my @messages;
+  for my $validator (@validators) {
+    push @messages, $validator->validate(%params);
+  }
+  return @messages;
+}
+
+1;

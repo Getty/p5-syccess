@@ -1,8 +1,17 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::LoadAllModules;
+use Test::More;
 
-BEGIN {
-#all_uses_ok( search_path => '' );
+for (qw(
+  Syccess
+  Syccess::Error
+  Syccess::Field
+  Syccess::Result
+  Syccess::Validator
+  Syccess::ValidatorSimple
+)) {
+  use_ok($_);
 }
+
+done_testing;
