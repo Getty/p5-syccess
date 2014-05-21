@@ -96,6 +96,29 @@ sub BUILD {
 
 =head1 SYNOPSIS
 
+  use Syccess;
+
+  my $syccess = Syccess->new(
+    fields => [
+      foo => [ required => 1 ],
+      bar => [ required => {
+        message => 'You have 5 seconds to comply.'
+      } ],
+    ],
+  );
+
+  my $result = $syccess->validate( foo => 1, bar => 1 );
+  if ($result->success) {
+    print "Yeah!\n";
+  }
+
+  my $failed = $syccess->validate();
+  unless ($result->success) {
+    for my $message (@{$failed->errors}) {
+      print $message->message." (".$message->syccess_field->name.")\n";
+    }
+  }
+
 =head1 DESCRIPTION
 
 Syccess is developed for L<SyContent|https://sycontent.de/>.
