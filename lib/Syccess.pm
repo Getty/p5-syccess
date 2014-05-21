@@ -46,6 +46,16 @@ sub _build_error_class {
   return 'Syccess::Error';
 }
 
+has fields_args => (
+  is => 'ro',
+  predicate => 1,
+);
+
+has errors_args => (
+  is => 'ro',
+  predicate => 1,
+);
+
 has fields_list => (
   is => 'ro',
   required => 1,
@@ -69,7 +79,10 @@ sub _build_fields {
 
 sub new_field {
   my ( $self, $name, $validators_list ) = @_;
+  my %fields_args = $self->has_fields_args
+    ? (%{$self->fields_args}) : ();
   return use_module($self->field_class)->new(
+    %fields_args,
     syccess => $self,
     name => $name,
     validators => $validators_list,
@@ -91,7 +104,6 @@ sub BUILD {
 
 1;
 
-
 =encoding utf8
 
 =head1 SYNOPSIS
@@ -100,10 +112,9 @@ sub BUILD {
 
   my $syccess = Syccess->new(
     fields => [
-      foo => [ required => 1 ],
-      bar => [ required => {
-        message => 'You have 5 seconds to comply.'
-      } ],
+      foo => [ required => 1, length => 4, label => 'PIN Code' ],
+      bar => [ required => { message => 'You have 5 seconds to comply.' } ],
+      baz => [ length => { min => 2, max => 4 }, label => 'Ramba Zamba' ],
     ],
   );
 
@@ -115,7 +126,7 @@ sub BUILD {
   my $failed = $syccess->validate();
   unless ($result->success) {
     for my $message (@{$failed->errors}) {
-      print $message->message." (".$message->syccess_field->name.")\n";
+      print $message->message."\n";
     }
   }
 

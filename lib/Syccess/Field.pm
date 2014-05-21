@@ -16,6 +16,31 @@ has name => (
   required => 1,
 );
 
+has label => (
+  is => 'lazy',
+  init_arg => undef,
+);
+
+sub _build_label {
+  my ( $self ) = @_;
+  if (ref $self->validators_list eq 'HASH') {
+    return $self->validators_list->{label}
+      if defined $self->validators_list->{label};
+  } else {
+    my @validators_list = @{$self->validators_list};
+    while (@validators_list) {
+      my ( $key, $arg ) = splice(@validators_list,0,2);
+      return $arg if $key eq 'label';
+    }
+  }
+  return ucfirst($self->name);
+}
+
+has validators_args => (
+  is => 'ro',
+  predicate => 1,
+);
+
 has validators_list => (
   is => 'ro',
   required => 1,
@@ -29,6 +54,8 @@ has validators => (
 
 sub _build_validators {
   my ( $self ) = @_;
+  my %validators_args = $self->has_validators_args
+    ? (%{$self->validators_args}) : ();
   my @validators;
   my @validators_list = ref $self->validators_list eq 'HASH'
     ? ( map { $_, $self->validators_list->{$_} }
@@ -37,6 +64,7 @@ sub _build_validators {
     : ( @{$self->validators_list} );
   while (@validators_list) {
     my ( $key, $arg ) = splice(@validators_list,0,2);
+    next if $key eq 'label';
     my %args;
     if (ref $arg eq 'HASH') {
       %args = %{$arg};
@@ -44,7 +72,9 @@ sub _build_validators {
       $args{arg} = $arg;
     }
     $args{syccess_field} = $self;
-    push @validators, $self->load_class_by_key($key)->new(%args);
+    push @validators, $self->load_class_by_key($key)->new(
+      %validators_args, %args
+    );
   }
   return [ @validators ];
 }

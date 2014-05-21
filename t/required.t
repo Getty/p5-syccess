@@ -7,7 +7,7 @@ use Syccess;
 
 my $syc = Syccess->new(
   fields => [
-    a => [ required => 1 ],
+    a => [ required => 1, label => 'Voodoo' ],
     b => [ required => { message => 'You have 5 seconds to comply.' } ],
   ],
 );
@@ -30,7 +30,7 @@ my $third = $syc->validate( b => 1 );
 ok(!$third->success,'third result is invalid');
 my @third_errors = @{$third->errors};
 is(scalar @third_errors,1,'third result has one error');
-is($third_errors[0]->message,'This field is required.','third result error message is standard');
+is($third_errors[0]->message,'Voodoo is required.','third result error message is standard');
 is($third_errors[0]->syccess_field->name,'a','third result error has correct field');
 
 done_testing;

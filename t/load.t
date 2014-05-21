@@ -9,6 +9,8 @@ for (qw(
   Syccess::Field
   Syccess::Result
   Syccess::Validator
+  Syccess::Validator::Length
+  Syccess::Validator::Required
   Syccess::ValidatorSimple
 )) {
   use_ok($_);

@@ -21,9 +21,16 @@ has message => (
 sub _build_message {
   my ( $self ) = @_;
   my $validator_message = $self->validator_message;
-  return ref $validator_message eq 'ARRAY'
-    ? sprintf(@{$validator_message})
-    : $validator_message;
+  my $format;
+  my @args = ( $self->syccess_field->label );
+  if (ref $validator_message eq 'ARRAY') {
+    my @sprintf_args = @{$validator_message};
+    $format = shift @sprintf_args;
+    push @args, @sprintf_args;
+  } else {
+    $format = $validator_message;
+  }
+  return sprintf($format,@args);
 }
 
 has validator_message => (
