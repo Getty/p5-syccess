@@ -9,7 +9,10 @@ for (qw(
   Syccess::Field
   Syccess::Result
   Syccess::Validator
+  Syccess::Validator::In
+  Syccess::Validator::IsNumber
   Syccess::Validator::Length
+  Syccess::Validator::Regex
   Syccess::Validator::Required
   Syccess::ValidatorSimple
 )) {
