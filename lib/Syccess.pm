@@ -11,7 +11,11 @@ has validator_namespaces => (
 
 sub _build_validator_namespaces {
   my ( $self ) = @_;
-  return [ @{$self->custom_validator_namespaces}, 'Syccess::Validator' ];
+  return [
+    @{$self->custom_validator_namespaces},
+    'Syccess::Validator',
+    'SyccessX::Validator',
+  ];
 }
 
 has custom_validator_namespaces => (
