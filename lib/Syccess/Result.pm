@@ -21,7 +21,17 @@ has success => (
 
 sub _build_success {
   my ( $self ) = @_;
-  return scalar @{$self->errors} ? 0 : 1;
+  return $self->error_count ? 0 : 1;
+}
+
+has error_count => (
+  is => 'lazy',
+  init_arg => undef,
+);
+
+sub _build_error_count {
+  my ( $self ) = @_;
+  return scalar @{$self->errors};
 }
 
 has errors => (
