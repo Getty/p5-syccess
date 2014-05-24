@@ -29,6 +29,14 @@ is($second_errors[0]->message,'A must be exactly 4 characters.','second result f
 is($second_errors[1]->message,'Bar must be at least 4 characters.','second result second error message is ok');
 is($second_errors[2]->message,'C is not allowed to be more than 8 characters.','second result third error message is ok');
 is($second_errors[3]->message,'Foo must be between 2 and 6 characters.','second result fourth error message is ok');
+my @a_second_errors = @{$second->errors('a')};
+is(scalar @a_second_errors,1,'second result has one error for field a');
+my @b_second_errors = @{$second->errors('b')};
+is(scalar @b_second_errors,1,'second result has one error for field b');
+my @c_second_errors = @{$second->errors('c')};
+is(scalar @c_second_errors,1,'second result has one error for field c');
+my @d_second_errors = @{$second->errors('d')};
+is(scalar @d_second_errors,1,'second result has one error for field d');
 
 my $third = $syc->validate( a => 1, b => 1 );
 ok(!$third->success,'third result is invalid');

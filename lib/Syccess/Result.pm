@@ -39,6 +39,19 @@ has errors => (
   init_arg => undef,
 );
 
+around errors => sub {
+  my ( $orig, $self, @args ) = @_;
+  my @errors = @{$self->$orig()};
+  return [ @errors ] unless scalar @args > 0;
+  my @args_errors;
+  for my $error (@errors) {
+    for my $arg (@args) {
+      push @args_errors, $error if $error->syccess_field->name eq $arg;
+    }
+  }
+  return [ @args_errors ];
+};
+
 sub _build_errors {
   my ( $self ) = @_;
   my %params = %{$self->params};

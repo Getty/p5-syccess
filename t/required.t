@@ -25,6 +25,8 @@ my @second_errors = @{$second->errors};
 is(scalar @second_errors,1,'second result has one error');
 is($second_errors[0]->message,'You have 5 seconds to comply.','second result error message is custom');
 is($second_errors[0]->syccess_field->name,'b','second result error has correct field');
+my @a_second_errors = @{$second->errors('b')};
+is(scalar @a_second_errors,1,'second result has one error for field b');
 
 my $third = $syc->validate( b => 1 );
 ok(!$third->success,'third result is invalid');
