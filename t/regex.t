@@ -25,7 +25,7 @@ my $second = $syc->validate( a => '%%%%&$&4234', b => 'GGGGG' );
 isa_ok($second,'Syccess::Result');
 ok(!$second->success,'second result is invalid');
 my @second_errors = @{$second->errors};
-is(scalar @second_errors,2,'second result has one error');
+is(scalar @second_errors,2,'second result has two errors');
 is($second_errors[0]->message,'Your value for A is not valid.','second result first error message is ok');
 is($second_errors[1]->message,'We only allow lowercase letters on this field.','second result second error message is ok');
 my @a_second_errors = @{$second->errors('a')};
