@@ -108,3 +108,41 @@ sub _build_errors {
 }
 
 1;
+
+=encoding utf8
+
+=head1 SYNOPSIS
+
+=head1 DESCRIPTION
+
+=method errors
+
+Gives back an ArrayRef of all errors, if no parameter is given. If you give
+a list of field names as parameters, then you will only get the errors of
+those specific fields.
+
+=method error_count
+
+Gives back the amount of errors.
+
+=method success
+
+Gives back a Bool value which indicates if the result of the validation was
+a general success or not, or other said, if there are no errors.
+
+=head1 SUPPORT
+
+IRC
+
+  Join #sycontent on irc.perl.org. Highlight Getty for fast reaction :).
+
+Repository
+
+  http://github.com/SyContent/Syccess
+  Pull request and additional contributors are welcome
+ 
+Issue Tracker
+
+  http://github.com/SyContent/Syccess/issues
+
+=cut

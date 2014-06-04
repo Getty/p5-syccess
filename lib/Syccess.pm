@@ -190,6 +190,102 @@ sub BUILD {
 
 Syccess is developed for L<SyContent|https://sycontent.de/>.
 
+B<BEHAVIOUR INFO:> The validators provided by the Syccess core are all
+designed to ignore a non existing value, an undefined value or an empty
+string. If you want that giving those leads to an error, then you must use the
+B<required> validator of B<Syccess::Validator::Required>. If you need to check
+against those values, for example you use B<Syccess::Validator::Code> and in
+some cases an undefined value is valid and sometimes not, then you must make
+a custom validator, see L</custom_validator_namespaces>.
+
+=attr fields
+
+Required ArrayRef containing the definition of the fields for the validation.
+It always first the name of the field and then an ArrayRef again with the
+validators. Those will be dispatched to instantiation L<Syccess::Field> to
+create the B<fields> objects. See more about validators on its attribute at
+L<Syccess::Field>.
+
+=attr validator_namespaces
+
+This attribute is the main namespace collection, where Syccess searches for
+its validators. Normally you do not set it directly, instead you set
+B<custom_validator_namespaces>, else you would remove B<Syccess::Validator>
+and the B<SyccessX::Validator>, which are automatically added after the
+B<custom_validator_namespaces> by default here.
+
+=attr custom_validator_namespaces
+
+Here you define an ArrayRef of the namespaces that should be used additional
+to the default ones. For example, if you add validator B<foo_bar>, then
+Syccess would search first with your custom namespace, for example
+B<MyApp::Validator::FooBar>, and after that it checks for
+B<Syccess::Validator::FooBar> and finally B<SyccessX::Validator::FooBar>.
+
+For making custom validator, you must use the L<Syccess::Validator> role, which
+allows to check over all params given. If you just want to make a simple
+validator that checks against only the relevant value of the field, then you
+can use L<Syccess::ValidatorSimple>.
+
+Please use B<SyccessX::Validator> as namespace if you want to upload a new
+general validator to B<CPAN>.
+
+=attr result_class
+
+The class which is used for the result. Default is L<Syccess::Result>.
+
+=attr error_class
+
+The class which is used for errors. Default is L<Syccess::Error>.
+
+=attr field_class
+
+The class which is used for the fields. Default is L<Syccess::Field>.
+
+=attr result_traits
+
+Traits to be added to the L<Syccess::Result> class. See B<with_traits> at
+L<MooX::Traits>.
+
+=attr error_traits
+
+Traits to be added to the L<Syccess::Error> class. See B<with_traits> at
+L<MooX::Traits>.
+
+=attr field_traits
+
+Traits to be added to the L<Syccess::Field> class. See B<with_traits> at
+L<MooX::Traits>.
+
+=attr fields_args
+
+Here you can give custom attributes which are dispatched to the instantiation
+of the L</field_class> objects.
+
+=attr errors_args
+
+Here you can give custom attributes which are dispatched to the instantiation
+of the L</error_class> objects.
+
+=method new_with_traits
+
+See L<MooX::Traits>.
+
+=method field
+
+Get the L<Syccess::Field> for the name given as parameter.
+
+=method fields
+
+Get all L<Syccess::Field> of the Syccess object.
+
+=method validate
+
+This is the main function to produce a L</result_class> object, which will
+then hold the result and the errors of the validation process. This function
+must be called with a Hash (no HashRef yet supported) of the values to check
+for the validation.
+
 =head1 SUPPORT
 
 IRC

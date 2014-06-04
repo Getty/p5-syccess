@@ -118,3 +118,26 @@ sub validate {
 }
 
 1;
+
+=encoding utf8
+
+=head1 SYNOPSIS
+
+=head1 DESCRIPTION
+
+=head1 SUPPORT
+
+IRC
+
+  Join #sycontent on irc.perl.org. Highlight Getty for fast reaction :).
+
+Repository
+
+  http://github.com/SyContent/Syccess
+  Pull request and additional contributors are welcome
+ 
+Issue Tracker
+
+  http://github.com/SyContent/Syccess/issues
+
+=cut
