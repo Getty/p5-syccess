@@ -161,6 +161,7 @@ sub BUILD {
     fields => [
       foo => [ required => 1, length => 4, label => 'PIN Code' ],
       bar => [ required => { message => 'You have 5 seconds to comply.' } ],
+      # if no label is given its made out of the name so 'Bar' in this case
       baz => [ length => { min => 2, max => 4 }, label => 'Ramba Zamba' ],
     ],
   );
@@ -193,8 +194,8 @@ Syccess is developed for L<SyContent|https://sycontent.de/>.
 B<BEHAVIOUR INFO:> The validators provided by the Syccess core are all
 designed to ignore a non existing value, an undefined value or an empty
 string. If you want that giving those leads to an error, then you must use the
-B<required> validator of B<Syccess::Validator::Required>. If you need to check
-against those values, for example you use B<Syccess::Validator::Code> and in
+B<required> validator of L<Syccess::Validator::Required>. If you need to check
+against those values, for example you use L<Syccess::Validator::Code> and in
 some cases an undefined value is valid and sometimes not, then you must make
 a custom validator, see L</custom_validator_namespaces>.
 
@@ -204,7 +205,8 @@ Required ArrayRef containing the definition of the fields for the validation.
 It always first the name of the field and then an ArrayRef again with the
 validators. Those will be dispatched to instantiation L<Syccess::Field> to
 create the B<fields> objects. See more about validators on its attribute at
-L<Syccess::Field>.
+L<Syccess::Field>. You can provide a validator several times, like several
+B<regex> or several B<code> validators.
 
 =attr validator_namespaces
 
@@ -285,6 +287,47 @@ This is the main function to produce a L</result_class> object, which will
 then hold the result and the errors of the validation process. This function
 must be called with a Hash (no HashRef yet supported) of the values to check
 for the validation.
+
+=head1 Core Validators
+
+=head2 call
+
+L<Syccess::Validator::Call> - Calling a method on an object for validation
+
+=head2 code
+
+L<Syccess::Validator::Code> - Using a CodeRef to validate
+
+=head2 in
+
+L<Syccess::Validator::In> - Checking if a value is in a given list of values
+
+=head2 is_number
+
+L<Syccess::Validator::IsNumber> - Check if the value is a number
+
+=head2 length
+
+L<Syccess::Validator::Length> - Check for length of the string, if its
+specific or min or max values.
+
+=head2 regex
+
+L<Syccess::Validator::Regex> - Check the value against a regex
+
+=head2 required
+
+L<Syccess::Validator::Required> - Value must be provided, and cant be empty
+
+=head1 Label Concept
+
+The system is designed to deliver a validation only, which leaded to the
+decision to not include the ability to give fields specific attributes. As
+a consequence out of this, the implementation of a label concept (so a visual
+representation of the field name in the error message) is done with a special
+trick, as seen in the L</SYNOPSIS>, through giving it as just another
+validator, it will then be consumed as label for the field instead of the load
+of another validator object.
 
 =head1 SUPPORT
 
