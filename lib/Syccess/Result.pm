@@ -4,6 +4,10 @@ package Syccess::Result;
 use Moo;
 use Module::Runtime qw( use_module );
 
+with qw(
+  MooX::Traits
+);
+
 has syccess => (
   is => 'ro',
   required => 1,
@@ -52,6 +56,20 @@ around errors => sub {
   return [ @args_errors ];
 };
 
+has error_class => (
+  is => 'lazy',
+  init_arg => undef,
+);
+
+sub _build_error_class {
+  my ( $self ) = @_;
+  my $error_class = use_module($self->syccess->error_class);
+  if ($self->syccess->has_error_traits) {
+    $error_class = $error_class->with_traits(@{$self->syccess->error_traits});
+  }
+  return $error_class;
+}
+
 sub _build_errors {
   my ( $self ) = @_;
   my %params = %{$self->params};
@@ -64,7 +82,7 @@ sub _build_errors {
     for my $message (@messages) {
       my $ref = ref $message;
       if ($ref eq 'ARRAY' or !ref) {
-        push @errors, use_module($self->syccess->error_class)->new(
+        push @errors, $self->error_class->new(
           %errors_args,
           message => $message,
           syccess_field => $field,
@@ -72,7 +90,7 @@ sub _build_errors {
         );
       } elsif ($ref eq 'HASH') {
         my %error_args = %{$message};
-        push @errors, use_module($self->syccess->error_class)->new(
+        push @errors, $self->error_class->new(
           %errors_args,
           %error_args,
           syccess_field => $field,

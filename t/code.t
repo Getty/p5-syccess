@@ -29,7 +29,7 @@ my $second = $syc->validate( a => 'd', b => 'd', c => 'd' );
 isa_ok($second,'Syccess::Result');
 ok(!$second->success,'second result is invalid');
 my @second_errors = @{$second->errors};
-is(scalar @second_errors,4,'second result has four error');
+is(scalar @second_errors,4,'second result has four errors');
 is($second_errors[0]->message,'Your value for A is not valid.','second result first error message is ok');
 is($second_errors[1]->message,'MUST BE B.','second result second error message is ok');
 is($second_errors[2]->message,'MUST BE C.','second result third error message is ok');

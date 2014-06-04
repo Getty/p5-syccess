@@ -5,6 +5,10 @@ use Moo;
 use Module::Runtime qw( use_module );
 use Module::Load::Conditional qw( can_load );
 
+with qw(
+  MooX::Traits
+);
+
 has syccess => (
   is => 'ro',
   required => 1,

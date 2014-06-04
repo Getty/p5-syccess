@@ -9,6 +9,7 @@ for (qw(
   Syccess::Field
   Syccess::Result
   Syccess::Validator
+  Syccess::Validator::Call
   Syccess::Validator::Code
   Syccess::Validator::In
   Syccess::Validator::IsNumber

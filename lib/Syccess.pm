@@ -5,6 +5,10 @@ use Moo;
 use Module::Runtime qw( use_module );
 use Tie::IxHash;
 
+with qw(
+  MooX::Traits
+);
+
 has validator_namespaces => (
   is => 'lazy',
 );
@@ -34,6 +38,11 @@ sub _build_field_class {
   return 'Syccess::Field';
 }
 
+has field_traits => (
+  is => 'ro',
+  predicate => 1,
+);
+
 has result_class => (
   is => 'lazy',
 );
@@ -42,6 +51,11 @@ sub _build_result_class {
   return 'Syccess::Result';
 }
 
+has result_traits => (
+  is => 'ro',
+  predicate => 1,
+);
+
 has error_class => (
   is => 'lazy',
 );
@@ -49,6 +63,11 @@ has error_class => (
 sub _build_error_class {
   return 'Syccess::Error';
 }
+
+has error_traits => (
+  is => 'ro',
+  predicate => 1,
+);
 
 has fields_args => (
   is => 'ro',
@@ -81,11 +100,31 @@ sub _build_fields {
   return [ @fields ];
 }
 
+sub field {
+  my ( $self, $name ) = @_;
+  my @field = grep { $_->name eq $name } @{$self->fields};
+  return scalar @field ? $field[0] : undef;
+}
+
+has resulting_field_class => (
+  is => 'lazy',
+  init_arg => undef,
+);
+
+sub _build_resulting_field_class {
+  my ( $self ) = @_;
+  my $field_class = use_module($self->field_class);
+  if ($self->has_field_traits) {
+    $field_class = $field_class->with_traits(@{$self->field_traits});
+  }
+  return $field_class;
+}
+
 sub new_field {
   my ( $self, $name, $validators_list ) = @_;
   my %fields_args = $self->has_fields_args
     ? (%{$self->fields_args}) : ();
-  return use_module($self->field_class)->new(
+  return $self->resulting_field_class->new(
     %fields_args,
     syccess => $self,
     name => $name,
@@ -95,7 +134,11 @@ sub new_field {
 
 sub validate {
   my ( $self, %params ) = @_;
-  return use_module($self->result_class)->new(
+  my $result_class = use_module($self->result_class);
+  if ($self->has_result_traits) {
+    $result_class = $result_class->with_traits(@{$self->result_traits});
+  }
+  return $result_class->new(
     syccess => $self,
     params => { %params },
   );
@@ -133,6 +176,15 @@ sub BUILD {
       print $message->message."\n";
     }
   }
+
+  my $traitsful_syccess = Syccess->new(
+    result_traits => [qw( MyApp::Syccess::ResultRole )],
+    error_traits => [qw( MyApp::Syccess::ErrorRole )],
+    field_traits => [qw( MyApp::Syccess::FieldRole )],
+    fields => [
+      # ...
+    ],
+  );
 
 =head1 DESCRIPTION
 

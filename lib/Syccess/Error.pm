@@ -3,6 +3,10 @@ package Syccess::Error;
 
 use Moo;
 
+with qw(
+  MooX::Traits
+);
+
 has syccess_field => (
   is => 'ro',
   required => 1,
