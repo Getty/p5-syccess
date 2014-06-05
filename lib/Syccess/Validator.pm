@@ -64,11 +64,11 @@ By default, the argument for the validator will be stored in L</arg>, except
 if its a HashRef, in this case, it will be dereferenced and be used as
 arguments for the creation of the validator. Which means:
 
-  SyForm->new( fields => [ length => 4 ] );
+  SyForm->new( fields => [ myfield => [ length => 4 ] ] );
 
 is the same as doing:
 
-  SyForm->new( fields => [ length => { arg => 4 } ] );
+  SyForm->new( fields => [ myfield => [ length => { arg => 4 } ] ] );
 
 This way allows to mix complex and straight forward usages. The core validator
 L<Syccess::Validator::Length> is a very good example for this.
