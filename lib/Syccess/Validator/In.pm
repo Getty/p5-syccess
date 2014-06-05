@@ -42,6 +42,14 @@ sub validator {
 
 =head1 DESCRIPTION
 
+This validator allows to define a specific list of values which are valid. They
+are given as ArrayRef.
+
+=attr message
+
+This contains the error message or the format for the error message
+generation. See L<Syccess::Error/validator_message>.
+
 =head1 SUPPORT
 
 IRC

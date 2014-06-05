@@ -41,6 +41,15 @@ sub validator {
 
 =head1 DESCRIPTION
 
+This validator allows checking against a regular expression. The regular
+expression can be given as Regex or plain scalar, which will be converted
+to a Regex.
+
+=attr message
+
+This contains the error message or the format for the error message
+generation. See L<Syccess::Error/validator_message>.
+
 =head1 SUPPORT
 
 IRC

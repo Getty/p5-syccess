@@ -31,10 +31,20 @@ sub validator {
   Syccess->new(
     fields => [
       foo => [ is_number => 1 ],
+      bar => [ is_number => { message => 'This is not cool!' } ],
     ],
   );
 
 =head1 DESCRIPTION
+
+This simple validator only checks if the given value is a number (using
+I<looks_like_number> of L<Scalar::Util>). The parameter given will not be used,
+but as usual you can override the error message by given B<message>.
+
+=attr message
+
+This contains the error message or the format for the error message
+generation. See L<Syccess::Error/validator_message>.
 
 =head1 SUPPORT
 

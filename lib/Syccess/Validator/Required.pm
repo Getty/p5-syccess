@@ -42,8 +42,13 @@ sub validate {
 =head1 DESCRIPTION
 
 This validator allows to check if a field is required. The default error
-message is B<%s is required.> and can be overriden via the B<message>
+message is B<'%s is required.'> and can be overriden via the L</message>
 parameter.
+
+=attr message
+
+This contains the error message or the format for the error message
+generation. See L<Syccess::Error/validator_message>.
 
 =head1 SUPPORT
 

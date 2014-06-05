@@ -60,6 +60,15 @@ sub validator {
 
 =head1 DESCRIPTION
 
+This validator allows checking against a method call on an object. If used
+with the B<not> parameter, it will see success if the called method gives back
+a B<false> value, else it will succeed on a B<true> value.
+
+=attr message
+
+This contains the error message or the format for the error message
+generation. See L<Syccess::Error/validator_message>.
+
 =head1 SUPPORT
 
 IRC

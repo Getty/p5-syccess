@@ -102,7 +102,25 @@ sub validator {
 =head1 DESCRIPTION
 
 This validator allows to check for the amount of characters in the value.
-The default error message depends on the parameter given.
+The default error message depends on the parameter given. The default
+functionality is using the parameter as the required length for the value.
+Longer or shorter would be denied. This can't be combined with L</min> or
+L</max>.
+
+=attr min
+
+Given this parameter, allows to define a minimum length for the value. This
+can be combined with L</max>.
+
+=attr max
+
+Given this parameter, allows to define a maximum length for the value. This
+can be combined with L</min>.
+
+=attr message
+
+This contains the error message or the format for the error message
+generation. See L<Syccess::Error/validator_message>.
 
 =head1 SUPPORT
 

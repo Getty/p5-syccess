@@ -54,7 +54,7 @@ L<Syccess::Field/errors> or L<Syccess::Result/errors>.
 
 =attr message
 
-Contains the actual resulting error message.
+Contains the actual resulting error message. See L</validator_message>.
 
 =attr syccess_field
 
@@ -63,6 +63,21 @@ References to the L<Syccess::Field> where this error comes from.
 =attr syccess_result
 
 References to the L<Syccess::Result> where this error comes from.
+
+=attr validator_message
+
+This field contains the error message information given back by the validator.
+I<Syccess::Error> uses this message with B<sprintf> to generate the resulting
+error message in L</message>. As parameter for the B<sprintf> you will get
+the label of the field. Alternative the validator can give back an ArrayRef
+which first element is the format for sprintf, while the rest of the ArrayRef
+is used as additional parameter for the formatting. This functionality is
+added to make localization of error messages easier, but its still not tested
+in a real environment, so changes might happen here.
+
+With an own error trait given via L<Syccess/error_traits> you can always
+override the way how the error messages are generated, if you are not happy
+with the given procedure.
 
 =head1 SUPPORT
 
