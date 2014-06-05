@@ -69,11 +69,6 @@ has error_traits => (
   predicate => 1,
 );
 
-has fields_args => (
-  is => 'ro',
-  predicate => 1,
-);
-
 has errors_args => (
   is => 'ro',
   predicate => 1,
@@ -122,10 +117,7 @@ sub _build_resulting_field_class {
 
 sub new_field {
   my ( $self, $name, $validators_list ) = @_;
-  my %fields_args = $self->has_fields_args
-    ? (%{$self->fields_args}) : ();
   return $self->resulting_field_class->new(
-    %fields_args,
     syccess => $self,
     name => $name,
     validators => $validators_list,
@@ -172,7 +164,7 @@ sub BUILD {
   }
 
   my $failed = $syccess->validate();
-  unless ($result->success) {
+  unless ($failed->success) {
     for my $message (@{$failed->errors}) {
       print $message->message."\n";
     }
@@ -189,7 +181,28 @@ sub BUILD {
 
 =head1 DESCRIPTION
 
-Syccess is developed for L<SyContent|https://sycontent.de/>.
+I<Syccess> is developed for L<SyContent|https://sycontent.de/>.
+
+I<Syccess> is a simple validation layer, which allows to check a hash of values
+against a validation definition and give back success or allow to see the
+error messages of the failure. I<Syccess> is not made for caring about anything
+else, so for a higher level library you integrate Syccess and not try to extend
+it. I<Syccess> is not made for giving extra attributes to the fields, the
+validator should be the key topic here, and it is very easy to make own
+validators specific for your environment, see L<Syccess::Validator> and
+L<Syccess::ValidatorSimple>, but you should be aware that most requirements
+should be covered with L<Syccess::Validator::Code> and
+L<Syccess::Validator::Call>, as both allow you to use simple validation methods
+you already may have in your model. This way you don't end up making I<Syccess>
+specific procedures, that might be harder to maintain.
+
+The complete concept of Syccess is read only, which means, a call to
+L</validate> will produce a L<Syccess::Result> which contains the resulting
+information, while the I<Syccess> object stays unchanged. A I<Syccess> object
+contains a I<Syccess::Field> object for every field of your L</fields>
+definition. On this field you have an object for every validator. Be aware that
+the validators are given as ArrayRef and you can use the same validator several
+times.
 
 B<BEHAVIOUR INFO:> The validators provided by the Syccess core are all
 designed to ignore a non existing value, an undefined value or an empty
@@ -259,11 +272,6 @@ L<MooX::Traits>.
 Traits to be added to the L<Syccess::Field> class. See B<with_traits> at
 L<MooX::Traits>.
 
-=attr fields_args
-
-Here you can give custom attributes which are dispatched to the instantiation
-of the L</field_class> objects.
-
 =attr errors_args
 
 Here you can give custom attributes which are dispatched to the instantiation
@@ -328,6 +336,14 @@ representation of the field name in the error message) is done with a special
 trick, as seen in the L</SYNOPSIS>, through giving it as just another
 validator, it will then be consumed as label for the field instead of the load
 of another validator object.
+
+=head1 TODO
+
+One bigger feature planned is adding the ability to stack I<Syccess> objects to
+allow cascaded parameters for validation. Currently this is not implemented,
+because, if you integrate Syccess in a bigger context, you will want to control
+the cascading yourself (in my case L<SyForm> takes the control of this). But I
+hope I will find later the time to make this possible.
 
 =head1 SUPPORT
 
