@@ -225,17 +225,17 @@ B<regex> or several B<code> validators.
 
 This attribute is the main namespace collection, where Syccess searches for
 its validators. Normally you do not set it directly, instead you set
-B<custom_validator_namespaces>, else you would remove B<Syccess::Validator>
-and the B<SyccessX::Validator>, which are automatically added after the
-B<custom_validator_namespaces> by default here.
+L</custom_validator_namespaces>, else you would remove I<Syccess::Validator>
+and the I<SyccessX::Validator>, which are automatically added after the
+L</custom_validator_namespaces> by default here.
 
 =attr custom_validator_namespaces
 
 Here you define an ArrayRef of the namespaces that should be used additional
 to the default ones. For example, if you add validator B<foo_bar>, then
 Syccess would search first with your custom namespace, for example
-B<MyApp::Validator::FooBar>, and after that it checks for
-B<Syccess::Validator::FooBar> and finally B<SyccessX::Validator::FooBar>.
+I<MyApp::Validator::FooBar>, and after that it checks for
+I<Syccess::Validator::FooBar> and finally I<SyccessX::Validator::FooBar>.
 
 For making custom validator, you must use the L<Syccess::Validator> role, which
 allows to check over all params given. If you just want to make a simple
