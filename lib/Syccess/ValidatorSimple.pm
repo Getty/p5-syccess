@@ -69,6 +69,9 @@ B<undef_ok> or B<empty_ok> with a sub that returns a false value. Then this
 specific case will still be dispatched to the B<validator> function and can
 then there produce an error, or not ;).
 
+If the value is missing, then B<@_> will only contain a reference to the
+validator object, but no value itself (if you override B<missing_ok>).
+
 =head1 SUPPORT
 
 IRC
