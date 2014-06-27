@@ -83,8 +83,15 @@ sub _build_validators {
   return [ @validators ];
 }
 
+has load_class_cache => (
+  is => 'ro',
+  init_arg => undef,
+  default => sub {{}},
+);
+
 sub load_class_by_key {
   my ( $self, $key ) = @_;
+  return $self->load_class_cache->{$key} if defined $self->load_class_cache->{$key};
   my $class;
   if ($key =~ m/::/) {
     if (can_load( modules => { $key, 0 } )) {
@@ -104,7 +111,7 @@ sub load_class_by_key {
     }
   }
   die __PACKAGE__." can't load validator for ".$key unless $class;
-  return use_module($class);
+  return $self->load_class_cache->{$key} = use_module($class);
 }
 
 sub validate {

@@ -124,13 +124,23 @@ sub new_field {
   );
 }
 
-sub validate {
-  my ( $self, %params ) = @_;
+has resulting_result_class => (
+  is => 'lazy',
+  init_arg => undef,
+);
+
+sub _build_resulting_result_class {
+  my ( $self ) = @_;
   my $result_class = use_module($self->result_class);
   if ($self->has_result_traits) {
     $result_class = $result_class->with_traits(@{$self->result_traits});
   }
-  return $result_class->new(
+  return $result_class;
+}
+
+sub validate {
+  my ( $self, %params ) = @_;
+  return $self->resulting_result_class->new(
     syccess => $self,
     params => { %params },
   );
@@ -341,7 +351,7 @@ of another validator object.
 
 One bigger feature planned is adding the ability to stack I<Syccess> objects to
 allow cascaded parameters for validation. Currently this is not implemented,
-because, if you integrate Syccess in a bigger context, you will want to control
+because, if you integrate I<Syccess> in a bigger context, you will want to control
 the cascading yourself (in my case L<SyForm> takes the control of this). But I
 hope I will find later the time to make this possible.
 
