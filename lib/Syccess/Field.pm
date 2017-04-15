@@ -37,7 +37,9 @@ sub _build_label {
       return $arg if $key eq 'label';
     }
   }
-  return ucfirst($self->name);
+  my $name = $self->name;
+  $name =~ s/_([a-z])/ \U$1/g;
+  return ucfirst($name);
 }
 
 has validators_args => (
@@ -99,7 +101,7 @@ sub load_class_by_key {
     }
   } else {
     my $module = $key;
-    $module =~ s/_([a-z])/\U$1/;
+    $module =~ s/_([a-z])/\U$1/g;
     $module = ucfirst($module);
     my @namespaces = @{$self->syccess->validator_namespaces};
     for my $namespace (@namespaces) {
@@ -158,15 +160,15 @@ and give them back in return.
 
 IRC
 
-  Join #sycontent on irc.perl.org. Highlight Getty for fast reaction :).
+  Join irc.perl.org and msg Getty
 
 Repository
 
-  http://github.com/SyContent/Syccess
+  http://github.com/Getty/p5-syccess
   Pull request and additional contributors are welcome
  
 Issue Tracker
 
-  http://github.com/SyContent/Syccess/issues
+  http://github.com/Getty/p5-syccess/issues
 
 =cut

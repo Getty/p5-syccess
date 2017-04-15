@@ -359,15 +359,15 @@ hope I will find later the time to make this possible.
 
 IRC
 
-  Join #sycontent on irc.perl.org. Highlight Getty for fast reaction :).
+  Join irc.perl.org and msg Getty
 
 Repository
 
-  http://github.com/SyContent/Syccess
+  http://github.com/Getty/p5-syccess
   Pull request and additional contributors are welcome
  
 Issue Tracker
 
-  http://github.com/SyContent/Syccess/issues
+  http://github.com/Getty/p5-syccess/issues
 
 =cut
