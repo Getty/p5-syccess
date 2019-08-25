@@ -38,6 +38,20 @@ sub _build_error_count {
   return scalar @{$self->errors};
 }
 
+has error_class => (
+  is => 'lazy',
+  init_arg => undef,
+);
+
+sub _build_error_class {
+  my ( $self ) = @_;
+  my $error_class = use_module($self->syccess->error_class);
+  if ($self->syccess->has_error_traits) {
+    $error_class = $error_class->with_traits(@{$self->syccess->error_traits});
+  }
+  return $error_class;
+}
+
 has errors => (
   is => 'lazy',
   init_arg => undef,
@@ -55,20 +69,6 @@ around errors => sub {
   }
   return [ @args_errors ];
 };
-
-has error_class => (
-  is => 'lazy',
-  init_arg => undef,
-);
-
-sub _build_error_class {
-  my ( $self ) = @_;
-  my $error_class = use_module($self->syccess->error_class);
-  if ($self->syccess->has_error_traits) {
-    $error_class = $error_class->with_traits(@{$self->syccess->error_traits});
-  }
-  return $error_class;
-}
 
 sub _build_errors {
   my ( $self ) = @_;

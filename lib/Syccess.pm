@@ -191,8 +191,6 @@ sub BUILD {
 
 =head1 DESCRIPTION
 
-I<Syccess> is developed for L<SyContent|https://sycontent.de/>.
-
 I<Syccess> is a simple validation layer, which allows to check a hash of values
 against a validation definition and give back success or allow to see the
 error messages of the failure. I<Syccess> is not made for caring about anything
